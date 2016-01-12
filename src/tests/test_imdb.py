@@ -1,12 +1,12 @@
+# coding: utf-8
 from __future__ import absolute_import, unicode_literals
 
-import cgi
 import time
 import datetime
 from operator import itemgetter
 
 import pytest
-from six.moves.urllib_parse import urlparse, quote
+from six.moves.urllib_parse import quote
 
 from mock import patch
 from imdbpie import Imdb
@@ -60,13 +60,14 @@ class TestImdb(object):
     def test_get_title_plots(self):
         plots = self.imdb.get_title_plots('tt0111161')
 
-        expected_plot0 = ('Andy Dufresne is a young and successful banker '
-                          'whose life changes drastically when he is convicted'
-                          ' and sentenced to life imprisonment for the murder '
-                          'of his wife and her lover. Set in the 1940s, the '
-                          'film shows how Andy, with the help of his friend '
-                          'Red, the prison entrepreneur, turns out to be a '
-                          'most unconventional prisoner.')
+        expected_plot0 = (
+            'Chronicles the experiences of a formerly successful banker as a '
+            'prisoner in the gloomy jailhouse of Shawshank after being found '
+            'guilty of a crime he claims he did not commit. The film portrays '
+            'the man\'s unique way of dealing with his new, torturous life; '
+            'along the way he befriends a number of fellow prisoners, most '
+            'notably a wise long-term inmate named Red.'
+        )
         expected_plot3 = ('Andy Dufresne is sent to Shawshank Prison for the '
                           'murder of his wife and her secret lover. He is very'
                           ' isolated and lonely at first, but realizes there '
@@ -181,22 +182,22 @@ class TestImdb(object):
         assert 17 == len(results)
         expected_results = [
             {'imdb_id': 'nm0000093', 'name': 'Brad Pitt'},
-            {'imdb_id': 'nm6221785', 'name': 'Brad Pittance'},
-            {'imdb_id': 'nm2876601', 'name': 'Brad Spitt'},
-            {'imdb_id': 'nm2542384', 'name': 'Brad Witt'},
-            {'imdb_id': 'nm7062918', 'name': 'Brad Pitz'},
-            {'imdb_id': 'nm3258729', 'name': 'Bradd Spitt'},
-            {'imdb_id': 'nm6173397', 'name': 'Brad Fitt'},
+            {'imdb_id': 'nm1583570', 'name': 'Brad Pitre'},
             {'imdb_id': 'nm1694695', 'name': 'Prad Pitt'},
             {'imdb_id': 'nm1784745', 'name': 'Brad Patton'},
-            {'imdb_id': 'nm6275510', 'name': 'Brad Sitton'},
+            {'imdb_id': 'nm1899342', 'name': 'Brad Pattullo'},
             {'imdb_id': 'nm2296458', 'name': 'Brad Pattison'},
-            {'imdb_id': 'nm1583570', 'name': 'Brad Pitre'},
+            {'imdb_id': 'nm2542384', 'name': 'Brad Witt'},
+            {'imdb_id': 'nm2703988', 'name': 'Brad Pitt vom Mahdenwald'},
+            {'imdb_id': 'nm2876601', 'name': 'Brad Spitt'},
+            {'imdb_id': 'nm3258729', 'name': 'Bradd Spitt'},
             {'imdb_id': 'nm3768356', 'name': 'Brad Bittner'},
             {'imdb_id': 'nm4463090', 'name': 'Brad Patterson'},
-            {'imdb_id': 'nm1899342', 'name': 'Brad Pattullo'},
-            {'imdb_id': 'nm5741181', 'name': 'Brad Little'},
-            {'imdb_id': 'nm2703988', 'name': 'Brad Pitt vom Mahdenwald'}
+            {'imdb_id': 'nm6173397', 'name': 'Brad Fitt'},
+            {'imdb_id': 'nm6221785', 'name': 'Brad Pittance'},
+            {'imdb_id': 'nm6275510', 'name': 'Brad Sitton'},
+            {'imdb_id': 'nm7062918', 'name': 'Brad Pitz'},
+            {'imdb_id': 'nm7733123', 'name': 'Bradley Pitts'}
         ]
         assert (sorted(expected_results, key=itemgetter('imdb_id')) ==
                 sorted(results, key=itemgetter('imdb_id')))
@@ -286,8 +287,8 @@ class TestImdb(object):
         assert title.release_date == '1994-10-14'
         assert title.certification == 'R'
         assert title.trailer_image_urls == [
-            'http://ia.media-imdb.com/images/M/MV5BMzAzMDI1MTE0MF5BMl5BanBnX'
-            'kFtZTgwNjMxNTMzMzE@._V1_.jpg'
+            'http://ia.media-imdb.com/images/M/'
+            'MV5BNjQ2NDA3MDcxMF5BMl5BanBnXkFtZTgwMjE5NTU0NzE@._V1_.jpg'
         ]
         expected_plot_outline = (
             'Two imprisoned men bond over a number '
@@ -351,18 +352,22 @@ class TestImdb(object):
     def test_get_person_images(self):
         person_images = self.imdb.get_person_images('nm0000033')
 
-        assert len(person_images) == 280
-        assert person_images[0].caption == 'Alfred Hitchcock'
+        assert len(person_images) == 278
+        assert person_images[0].caption == (
+            'Still of Alfred Hitchcock and '
+            'François Truffaut in Hitchcock/Truffaut'
+        )
         assert person_images[0].url == (
-            'http://ia.media-imdb.com/images/M/MV5BMTQwMzIzNDY0OV5BMl5BanBnX'
-            'kFtZTcwMTg0MzgyOQ@@._V1_.jpg')
-        assert person_images[0].width == 1308
-        assert person_images[0].height == 2048
+            'http://ia.media-imdb.com/images/M/'
+            'MV5BMjExNTk4OTQyOV5BMl5BanBnXkFtZTgwMzA5NjU3NjE@._V1_.jpg'
+        )
+        assert person_images[0].width == 2000
+        assert person_images[0].height == 1302
 
     def test_get_title_images(self):
         title_images = self.imdb.get_title_images('tt0111161')
 
-        assert len(title_images) == 33
+        assert len(title_images) == 34
 
         for image in title_images:
             assert isinstance(image, Image) is True
