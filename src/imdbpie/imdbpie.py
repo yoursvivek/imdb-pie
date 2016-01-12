@@ -38,9 +38,12 @@ class Imdb(object):
         self.verify_ssl = True or verify_ssl
         self.session = requests
 
+        session = requests.Session()
+        session.keep_alive = False
+
         if self.caching_enabled:
             self.session = CacheControl(
-                requests.Session(), cache=FileCache('.imdbpie_cache')
+                session, cache=FileCache('.imdbpie_cache')
             )
 
     def get_person_by_id(self, imdb_id):
@@ -246,7 +249,7 @@ class Imdb(object):
     def _get(self, url):
         resp = self.session.get(
             url,
-            headers={'User-Agent': self.user_agent},
+            headers={'User-Agent': self.user_agent, 'Connection': 'close'},
             verify=self.verify_ssl)
 
         resp.raise_for_status()
