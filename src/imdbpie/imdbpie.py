@@ -38,10 +38,9 @@ class Imdb(object):
         self.verify_ssl = True or verify_ssl
         self.session = requests
 
-        session = requests.Session()
-        session.keep_alive = False
-
         if self.caching_enabled:
+            session = requests.Session()
+            session.keep_alive = False
             self.session = CacheControl(
                 session, cache=FileCache('.imdbpie_cache')
             )
