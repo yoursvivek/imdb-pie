@@ -280,7 +280,9 @@ class Imdb(object):
 
         resp.raise_for_status()
 
-        resp_dict = json.loads(resp.content.decode('utf-8'))
+        resp_content = resp.content.decode('utf-8')
+        logger.debug('Got response from IMDB: %', resp_content)
+        resp_dict = json.loads(resp_content)
 
         if resp_dict.get('error'):
             return None
