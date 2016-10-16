@@ -10,6 +10,17 @@ class Person(object):
         self.imdb_id = self._extract_imdb_id(data)
         self.photo_url = self._extract_photo_url(data)
 
+        # secondary attribs that will be set when called via get_person_by_id
+
+        self.known_for = self._extract_known_for(data)
+        self.bio = data.get('bio')
+        self.real_name = data.get('real_name')
+        self.aka = data.get('aka')
+        self.known_for = [{'role': v.get('attr')
+                           'title': Title(v.get('title')}
+                          for v in data.get('known_for', [])]
+        self.photos = [Image(v) for v in data.get('photos')]
+
         # secondary attribs, will only get data when called via get_title_by_id
 
         # token and label are the persons categorisation
